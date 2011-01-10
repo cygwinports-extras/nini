@@ -1,0 +1,6 @@
+category: DotNET
+requires: mono
+external-source: nini
+sdesc: ".NET configuration library"
+ldesc: "Nini is an uncommonly powerful .NET configuration library 
+designed to help build highly configurable applications quickly."

@@ -1,0 +1,34 @@
+inherit mono
+
+HOMEPAGE="http://nini.sourceforge.net/"
+SRC_URI="mirror://sourceforge/nini/Nini-${PV}.zip"
+SRC_DIR="Nini"
+
+PKG_NAMES="mono-Nini1.1"
+mono_Nini1_1_CONTENTS="usr/"
+
+src_compile() {
+	lndirs
+	cd ${B}/Source
+	${GMCS} -nowarn:1616 -target:library -out:Nini.dll -D:STRONG \
+	        -r:System.dll -r:System.Xml.dll -keyfile:${MONO_SNK} *.cs */*.cs || error
+
+	cat > nini.pc <<_EOF
+prefix=\${pcfiledir}/../..
+exec_prefix=\${prefix}
+libdir=\${prefix}/lib
+
+Name: Nini
+Description: Configuration library for .NET
+Version: ${PV}
+Libs: -r:\${libdir}/mono/nini/Nini.dll
+_EOF
+}
+
+src_install() {
+	cd ${B}/Source
+	gacinto nini
+	dogac Nini.dll
+
+	dopkgconfig nini.pc
+}
